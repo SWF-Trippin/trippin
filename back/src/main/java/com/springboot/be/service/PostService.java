@@ -190,6 +190,7 @@ public class PostService {
             photo.setTakenAt(parseDateTime(photoData.getTakenAt()));
 
             photoRepository.save(photo);
+            post.getPhotos().add(photo);
         }
     }
 
@@ -197,13 +198,19 @@ public class PostService {
         GlobalPlace globalPlace = globalPlaceRepository
                 .findByPlaceNameIgnoreCase(address)
                 .orElseGet(() -> {
-                    PlaceInfo geo = geoCodingService.forwardGeocoding(address);
+                    try {
+                        PlaceInfo geo = geoCodingService.forwardGeocoding(address);
 
-                    GlobalPlace newPlace = new GlobalPlace();
-                    newPlace.setPlaceName(geo.getFormattedAddress());
-                    newPlace.setLatitude(geo.getLatitude());
-                    newPlace.setLongitude(geo.getLongitude());
-                    return globalPlaceRepository.save(newPlace);
+                        GlobalPlace newPlace = new GlobalPlace();
+                        newPlace.setPlaceName(geo.getFormattedAddress());
+                        newPlace.setLatitude(geo.getLatitude());
+                        newPlace.setLongitude(geo.getLongitude());
+                        return globalPlaceRepository.save(newPlace);
+                    } catch (Exception e) {
+                        GlobalPlace newPlace = new GlobalPlace();
+                        newPlace.setPlaceName(address);
+                        return globalPlaceRepository.save(newPlace);
+                    }
                 });
 
         return markerRepository
