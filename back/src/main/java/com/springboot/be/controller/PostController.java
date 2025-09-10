@@ -2,9 +2,12 @@ package com.springboot.be.controller;
 
 import com.springboot.be.dto.common.ApiResponse;
 import com.springboot.be.dto.request.PostCreateRequest;
+import com.springboot.be.dto.request.PostUpdateRequest;
+import com.springboot.be.dto.response.PostCreateResponse;
 import com.springboot.be.dto.response.PostDetailDto;
 import com.springboot.be.security.services.UserDetailsImpl;
 import com.springboot.be.service.PostService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +19,9 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public ApiResponse<Void> createPost(@RequestBody PostCreateRequest request, @AuthenticationPrincipal UserDetailsImpl me) {
-        postService.createPost(request, me.getId());
-        return ApiResponse.<Void>created("게시글 생성 성공", null);
+    public ApiResponse<PostCreateResponse> createPost(@Valid @RequestBody PostCreateRequest request, @AuthenticationPrincipal UserDetailsImpl me) {
+        PostCreateResponse res = postService.createPost(request, me.getId());
+        return ApiResponse.created("게시글 생성 성공", res);
     }
 
     @GetMapping("/{postId}")
@@ -28,13 +31,13 @@ public class PostController {
     }
 
     @PutMapping("/{postId}")
-    public ApiResponse<Void> updatePost(
+    public ApiResponse<PostCreateResponse> updatePost(
             @PathVariable Long postId,
-            @RequestBody PostCreateRequest request,
+            @RequestBody PostUpdateRequest request,
             @AuthenticationPrincipal UserDetailsImpl me
     ) {
-        postService.updatePost(postId, request, me.getId());
-        return ApiResponse.success("게시글 수정 성공");
+        PostCreateResponse res = postService.updatePost(postId, request, me.getId());
+        return ApiResponse.<PostCreateResponse>success("게시글 수정 성공", res);
     }
 
     @DeleteMapping("/{postId}")

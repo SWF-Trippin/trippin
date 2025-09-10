@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TravelPathRepository extends JpaRepository<TravelPath, Long> {
@@ -27,4 +28,8 @@ public interface TravelPathRepository extends JpaRepository<TravelPath, Long> {
     List<TravelPath> findRecommendedByLocation(@Param("lat") double lat,
                                                @Param("lng") double lng,
                                                @Param("radius") double radius);
+
+    Optional<TravelPath> findByPost_Id(Long postId);
+
+    boolean existsByPost_Id(Long postId);
 }

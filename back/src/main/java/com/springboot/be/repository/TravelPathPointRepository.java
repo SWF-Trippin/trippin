@@ -28,4 +28,6 @@ public interface TravelPathPointRepository extends JpaRepository<TravelPathPoint
                 ORDER BY tpp.sequence ASC
             """)
     List<MarkerSummaryDto> findMarkerByTravelPath(@Param("travelPathId") Long travelPathId);
+
+    boolean existsByMarker_Id(Long markerId);
 }

@@ -16,7 +16,7 @@ public class ApiResponse<T> {
         return new ApiResponse<>(200, message, data);
     }
 
-    public static <T> ApiResponse<T> success(String message) {
+    public static ApiResponse<Void> success(String message) {
         return new ApiResponse<>(200, message, null);
     }
 
@@ -24,7 +24,7 @@ public class ApiResponse<T> {
         return new ApiResponse<>(201, message, data);
     }
 
-    public static <T> ApiResponse<T> error(int status, String message) {
+    public static ApiResponse<Void> error(int status, String message) {
         return new ApiResponse<>(status, message, null);
     }
 
