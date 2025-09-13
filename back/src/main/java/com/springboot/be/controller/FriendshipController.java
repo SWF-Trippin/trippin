@@ -2,10 +2,7 @@ package com.springboot.be.controller;
 
 import com.springboot.be.dto.common.ApiResponse;
 import com.springboot.be.dto.request.SendFriendRequest;
-import com.springboot.be.dto.response.FriendSummaryResponse;
-import com.springboot.be.dto.response.IdResponse;
-import com.springboot.be.dto.response.MessageResponse;
-import com.springboot.be.dto.response.PostSummaryDto;
+import com.springboot.be.dto.response.*;
 import com.springboot.be.security.services.UserDetailsImpl;
 import com.springboot.be.service.FriendshipService;
 import lombok.RequiredArgsConstructor;
@@ -55,7 +52,7 @@ public class FriendshipController {
 
     // 요청 목록 조회
     @GetMapping("/requests/incoming")
-    public List<FriendSummaryResponse> incoming(@AuthenticationPrincipal UserDetailsImpl principal) {
+    public List<IncomingFriendDto> incoming(@AuthenticationPrincipal UserDetailsImpl principal) {
         return service.listIncoming(principal.getEmail());
     }
 

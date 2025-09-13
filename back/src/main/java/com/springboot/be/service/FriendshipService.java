@@ -107,14 +107,9 @@ public class FriendshipService {
     }
 
     @Transactional
-    public List<FriendSummaryResponse> listIncoming(String email) {
-        return friendshipRepo.findByToUser_EmailAndStatus(email, FriendshipStatus.PENDING)
-                .stream()
-                .map(f -> FriendSummaryResponse
-                        .of(f.getFromUser()))
-                .toList();
+    public List<IncomingFriendDto> listIncoming(String email) {
+        return friendshipRepo.findIncomingSummaries(email, FriendshipStatus.PENDING);
     }
-
     @Transactional
     public Optional<FriendSearchResponse> searchByEmail(String email) {
         return userRepo.findByEmail(email)
