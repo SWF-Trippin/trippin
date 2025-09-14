@@ -29,10 +29,10 @@ public class TravelPath {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "travelPath")
+    @OneToMany(mappedBy = "travelPath", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TravelPathPoint> points = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", nullable = false)
+    @JoinColumn(name = "post_id", unique = true, nullable = false)
     private Post post;
 }

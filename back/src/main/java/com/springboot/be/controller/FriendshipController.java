@@ -4,6 +4,9 @@ import com.springboot.be.dto.response.FriendSummaryResponse;
 import com.springboot.be.dto.response.IdResponse;
 import com.springboot.be.dto.response.MessageResponse;
 
+import com.springboot.be.dto.common.ApiResponse;
+import com.springboot.be.dto.request.SendFriendRequest;
+import com.springboot.be.dto.response.*;
 import com.springboot.be.security.services.UserDetailsImpl;
 import com.springboot.be.service.FriendshipService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FriendshipController {
     private final FriendshipService service;
+    private final FriendshipService friendshipService;
 
     // 친구 요청 보내기
     @PostMapping("/requests")
@@ -53,7 +57,7 @@ public class FriendshipController {
 
     // 요청 목록 조회
     @GetMapping("/requests/incoming")
-    public List<FriendSummaryResponse> incoming(@AuthenticationPrincipal UserDetailsImpl principal) {
+    public List<IncomingFriendDto> incoming(@AuthenticationPrincipal UserDetailsImpl principal) {
         return service.listIncoming(principal.getEmail());
     }
 
@@ -68,4 +72,13 @@ public class FriendshipController {
                     .body("해당 이메일의 사용자를 찾을 수 없습니다.");
         }
     }
+
+    @GetMapping("/feed")
+    public ApiResponse<List<PostSummaryDto>> getFriendsFeed(
+            @AuthenticationPrincipal UserDetailsImpl me
+    ) {
+        List<PostSummaryDto> list = friendshipService.getFriendsPosts(me.getEmail());
+        return ApiResponse.success("친구 피드 조회 성공", list);
+    }
+
 }

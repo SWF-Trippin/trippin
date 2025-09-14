@@ -18,4 +18,6 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
                 ORDER BY p.createdAt DESC, p.id DESC
             """)
     List<Photo> findByMarker_IdOrderByCreatedAtDesc(@Param("markerId") Long markerId);
+
+    boolean existsByMarker_Id(Long markerId);
 }
