@@ -15,7 +15,7 @@ type IconParam = {
 const IconButton = ({ icon, onPress, size, color }: IconParam) => {
   return (
     <Pressable onPress={onPress}>
-      <S.IconImage source={icon} size={size} color={color || colors.white} />
+      <S.IconImage source={icon} size={size} />
     </Pressable>
   );
 };

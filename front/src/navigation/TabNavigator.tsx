@@ -61,6 +61,7 @@ const TabNavigator = () => {
         },
       })}
     >
+      
       <Tab.Screen
         name="Home"
         component={HomeStack}
@@ -75,8 +76,6 @@ const TabNavigator = () => {
           tabBarLabel: renderLabel('Friend'),
         }}
       />
-      
-
       <Tab.Screen
         name="MyPageStack"
         component={MyPageStack}

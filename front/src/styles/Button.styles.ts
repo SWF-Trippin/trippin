@@ -35,15 +35,14 @@ export const SelectText = styled(CustomText).attrs({
   color: ${({ isSelected }) => (isSelected ? colors.gray8 : colors.gray5)};
 `;
 
-export const ButtonText = styled(CustomText).attrs({
-  weight: '500',
-})`
+export const ButtonText = styled(CustomText)<{ weight?: string }>` 
   font-size: 16px;
   color: ${colors.gray8};
+  font-weight: ${({ weight }) => weight || '500'};
 `;
 
-export const IconImage = styled.Image<{ size?: number; color?: string }>`
+export const IconImage = styled.Image<{ size?: number }>`
   width: ${({ size }) => size ?? 20}px;
   height: ${({ size }) => size ?? 20}px;
-  tint-color: ${({ color }) => color || 'black'};
+  resize-mode: contain;
 `;
