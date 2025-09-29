@@ -6,9 +6,9 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '../../styles/colors';
-import kakao from '../../assets/images/icon/kakao.png'; 
-import naver from '../../assets/images/icon/naver.png'; 
-import google from '../../assets/images/icon/google.png'; 
+import kakao from '../../assets/images/icon/kakao.png';
+import naver from '../../assets/images/icon/naver.png';
+import google from '../../assets/images/icon/google.png';
 import IconButton from '../../components/buttons/IconButton';
 import CustomText from '../../components/ui/CustomText.tsx';
 import styled from 'styled-components/native';
@@ -23,7 +23,7 @@ const Onboarding = () => {
 
   return (
     <Container style={{ paddingBottom: bottom, paddingTop: 152 }}>
-      <SubText weight='400'>기록하고싶은 그 순간, trippin에 담아</SubText>
+      <SubText weight="400">기록하고싶은 그 순간, trippin에 담아</SubText>
       <LogoText>Trippin</LogoText>
 
       <InputWrapper>
@@ -55,7 +55,11 @@ const Onboarding = () => {
       />
 
       <SubMenu>
-        <MenuText onPress={() => navigation.navigate('AuthStack', {screen: 'SignUp'})}>회원가입</MenuText>
+        <MenuText
+          onPress={() => navigation.navigate('AuthStack', { screen: 'SignUp' })}
+        >
+          회원가입
+        </MenuText>
         <Divider>|</Divider>
         <MenuText>비밀번호 찾기</MenuText>
       </SubMenu>
@@ -68,27 +72,27 @@ const Onboarding = () => {
 
       <SnsWrapper>
         <SnsButton bgColor={colors.kakao} size={60}>
-          <IconButton  
-          icon={kakao} 
-          size={60} 
-          color= {colors.kakao} 
-          onPress={() => navigation.navigate('Main')}
+          <IconButton
+            icon={kakao}
+            size={60}
+            color={colors.kakao}
+            onPress={() => navigation.navigate('Main')}
           />
         </SnsButton>
         <SnsButton bgColor={colors.naver} size={60}>
-          <IconButton 
-          icon={naver} 
-          size={55} 
-          color= {colors.naver} 
-          onPress={() => navigation.navigate('Main')}
+          <IconButton
+            icon={naver}
+            size={55}
+            color={colors.naver}
+            onPress={() => navigation.navigate('Main')}
           />
         </SnsButton>
         <SnsButton bgColor={colors.white} size={60}>
-          <IconButton 
-          icon={google} 
-          size={50} 
-          color= {colors.white} 
-          onPress={() => navigation.navigate('Main')}
+          <IconButton
+            icon={google}
+            size={50}
+            color={colors.white}
+            onPress={() => navigation.navigate('Main')}
           />
         </SnsButton>
       </SnsWrapper>
@@ -148,7 +152,6 @@ export const SubMenu = styled.View`
 export const MenuText = styled.Text`
   font-size: 10px;
   color: ${colors.gray6};
-  
 `;
 
 export const Divider = styled.Text`
@@ -183,7 +186,10 @@ export const SnsWrapper = styled.View`
   margin-top: 23px;
 `;
 
-export const SnsButton = styled.TouchableOpacity<{ bgColor?: string; size?: number }>`
+export const SnsButton = styled.TouchableOpacity<{
+  bgColor?: string;
+  size?: number;
+}>`
   width: ${({ size }) => size || 60}px;
   height: ${({ size }) => size || 60}px;
   border-radius: ${({ size }) => (size || 60) / 2}px;
@@ -193,5 +199,3 @@ export const SnsButton = styled.TouchableOpacity<{ bgColor?: string; size?: numb
   margin: 0 30px;
   overflow: hidden;
 `;
-
-
