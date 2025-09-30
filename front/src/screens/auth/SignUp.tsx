@@ -8,13 +8,39 @@ import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '../../styles/colors';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
+import { Dropdown } from 'react-native-element-dropdown';
+import { StyleSheet } from 'react-native';
 
 type Navigation = NativeStackNavigationProp<AuthStackParam>;
+
+const currentYear = new Date().getFullYear();
+
+const yearsData = Array.from({ length: currentYear - 1980 + 1 }, (_, i) => ({
+  label: `${currentYear - i}년`,
+  value: currentYear - i,
+}));
+
+const monthsData = Array.from({ length: 12 }, (_, i) => ({
+  label: `${i + 1}월`,
+  value: i + 1,
+}));
+
+const getDays = (year: number, month: number) => {
+  const daysInMonth = new Date(year, month, 0).getDate();
+  return Array.from({ length: daysInMonth }, (_, i) => ({
+    label: `${i + 1}일`,
+    value: i + 1,
+  }));
+};
 
 const SignUp = () => {
   const navigation = useNavigation<Navigation>();
   const { bottom } = useSafeAreaInsets();
   const [gender, setGender] = useState('');
+
+  const [year, setYear] = useState<number | null>(null);
+  const [month, setMonth] = useState<number | null>(null);
+  const [day, setDay] = useState<number | null>(null);
 
   return (
     <Container style={{ paddingBottom: bottom }}>
@@ -52,9 +78,44 @@ const SignUp = () => {
       <InputWrapper3>
         <Label>생년월일</Label>
         <Row>
-          <DateInput placeholder="년도" />
-          <DateInput placeholder="월" />
-          <DateInput placeholder="일" />
+          <Dropdown
+            style={styles.dropdown}
+            placeholder="년도"
+            data={yearsData}
+            labelField="label"
+            valueField="value"
+            value={year}
+            onChange={item => setYear(item.value)}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            itemTextStyle={{ fontSize: 13, color: colors.gray6 }}
+          />
+
+          <Dropdown
+            style={styles.dropdown}
+            placeholder="월"
+            data={monthsData}
+            labelField="label"
+            valueField="value"
+            value={month}
+            onChange={item => setMonth(item.value)}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            itemTextStyle={{ fontSize: 13, color: colors.gray6 }}
+          />
+
+          <Dropdown
+            style={styles.dropdown}
+            placeholder="일"
+            data={year && month ? getDays(year, month) : []}
+            labelField="label"
+            valueField="value"
+            value={day}
+            onChange={item => setDay(item.value)}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            itemTextStyle={{ fontSize: 13, color: colors.gray6 }}
+          />
         </Row>
       </InputWrapper3>
 
@@ -72,19 +133,18 @@ export default SignUp;
 
 const Label = styled(CustomText)`
   font-size: 13px;
-  font-weight: 600px;
+  font-weight: 600;
   margin-bottom: 11px;
-  color: ${colors.gray8};
+  color: ${colors.gray6};
 `;
 
 const Input = styled.TextInput`
   border-bottom-width: 1px;
-  border-bottom-color: #ccc;
-  margin-bottom: 24px;
+  border-bottom-color: ${colors.gray2};
   margin: 11px 4.87px 10px 0;
   font-size: 10px;
   color: ${colors.gray5};
-  font-weight: 400px;
+  font-weight: 400;
 `;
 
 const InputWrapper = styled.View`
@@ -122,11 +182,26 @@ const GenderText = styled.Text<{ selected: boolean }>`
   color: ${props => (props.selected ? colors.gray8 : colors.gray5)};
 `;
 
-const DateInput = styled.TextInput`
-  flex: 1;
-  margin: 0 4px;
-  border-bottom-width: 1px;
-  border-bottom-color: #ccc;
-  text-align: center;
-  padding: 8px 0;
-`;
+const styles = StyleSheet.create({
+  dropdown: {
+    flex: 1,
+    height: 50,
+    borderColor: colors.gray2,
+    borderWidth: 0,
+    borderRadius: 0,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.gray2,
+    paddingHorizontal: 12,
+    marginHorizontal: 5,
+  },
+  placeholderStyle: {
+    fontSize: 13,
+    fontWeight: '400',
+    color: colors.gray6,
+  },
+  selectedTextStyle: {
+    fontSize: 13,
+    fontWeight: '400',
+    color: colors.gray6,
+  },
+});
