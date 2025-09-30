@@ -4,10 +4,14 @@ import SignUp from './SignUp';
 import { colors } from '../../styles/colors';
 import CustomText from '../../components/ui/CustomText.tsx';
 import TabNavigator from '../../navigation/TabNavigator';
+import FindAccount from './FindAccount.tsx';
+import ResetPassword from './ResetPassword.tsx';
 
 export type AuthStackParam = {
   SignUp: undefined;
   Main: undefined;
+  FindAccount: undefined;
+  ResetPassword: undefined;
 };
 
 const Stack = createNativeStackNavigator<AuthStackParam>();
@@ -37,6 +41,16 @@ const AuthStack = () => {
         name="SignUp"
         component={SignUp}
         options={{ title: '회원가입' }}
+      />
+      <Stack.Screen
+        name="FindAccount"
+        component={FindAccount}
+        options={{ title: '비밀번호 재설정' }}
+      />
+      <Stack.Screen
+        name="ResetPassword"
+        component={ResetPassword}
+        options={{ title: '비밀번호 재설정' }}
       />
       <Stack.Screen
         name="Main"

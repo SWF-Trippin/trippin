@@ -61,7 +61,13 @@ const Onboarding = () => {
           회원가입
         </MenuText>
         <Divider>|</Divider>
-        <MenuText>비밀번호 찾기</MenuText>
+        <MenuText
+          onPress={() =>
+            navigation.navigate('AuthStack', { screen: 'FindAccount' })
+          }
+        >
+          비밀번호 찾기
+        </MenuText>
       </SubMenu>
 
       <DividerLineWrapper>

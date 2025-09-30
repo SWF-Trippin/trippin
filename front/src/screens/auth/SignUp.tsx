@@ -52,10 +52,10 @@ const SignUp = () => {
         <Label>비밀번호</Label>
         <Input placeholder="비밀번호를 입력하세요." secureTextEntry />
       </InputWrapper>
-      <InputWrapper2>
+      <InputWrapper>
         <Label>비밀번호 확인</Label>
         <Input placeholder="비밀번호를 다시 입력하세요." secureTextEntry />
-      </InputWrapper2>
+      </InputWrapper>
 
       <InputWrapper2>
         <Label>성별</Label>
@@ -134,14 +134,13 @@ export default SignUp;
 const Label = styled(CustomText)`
   font-size: 13px;
   font-weight: 600;
-  margin-bottom: 11px;
   color: ${colors.gray6};
 `;
 
 const Input = styled.TextInput`
   border-bottom-width: 1px;
   border-bottom-color: ${colors.gray2};
-  margin: 11px 4.87px 10px 0;
+  margin: 11px 4.87px 20px 0;
   font-size: 10px;
   color: ${colors.gray5};
   font-weight: 400;
@@ -165,6 +164,7 @@ const InputWrapper3 = styled.View`
 const Row = styled.View`
   flex-direction: row;
   justify-content: space-between;
+  margin-top: 15px;
 `;
 
 const GenderButton = styled.TouchableOpacity<{ selected: boolean }>`
