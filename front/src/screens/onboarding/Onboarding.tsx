@@ -17,11 +17,59 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Navigation = NativeStackNavigationProp<RootStackParamList>;
 
+const Base_URL = 'http://10.0.2.2:8080';
+const SignIn_URL = `${Base_URL}/api/auth/signin`;
+
 const Onboarding = () => {
   const navigation = useNavigation<Navigation>();
   const { bottom } = useSafeAreaInsets();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    if (loading) return;
+
+    if (!email || !password) {
+      Alert.alert('오류', '이메일과 비밀번호를 입력해주세요.');
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const res = await fetch(SignIn_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!res.ok) {
+        let detail = '';
+        try {
+          const err = await res.json();
+          detail = err?.message || JSON.stringify(err);
+        } catch (_) {}
+        throw new Error(`${res.status} ${res.statusText} ${detail}`);
+      }
+
+      const data = await res.json();
+
+      await AsyncStorage.setItem('accessToken', data.accessToken);
+      await AsyncStorage.setItem('refreshToken', data.refreshToken);
+
+      Alert.alert('로그인 성공', `${data.username}님 환영합니다!`, [
+        {
+          text: '확인',
+          onPress: () => navigation.navigate('Main'),
+        },
+      ]);
+    } catch (e: any) {
+      Alert.alert('로그인 실패', e?.message ?? '네트워크 오류가 발생했습니다.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Container style={{ paddingBottom: bottom, paddingTop: 152 }}>
@@ -50,9 +98,9 @@ const Onboarding = () => {
       </InputWrapper2>
 
       <PrimaryButton
-        title="로그인"
+        title={loading ? '로그인 중...' : '로그인'}
         color={colors.blue}
-        onPress={() => navigation.navigate('Main')}
+        onPress={handleLogin}
         fontWeight="400"
       />
 
