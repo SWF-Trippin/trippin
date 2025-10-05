@@ -26,34 +26,36 @@ const TabNavigator = () => {
       screenOptions={({ route }): BottomTabNavigationOptions => ({
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: colors.white,
-          height: 110,
+          backgroundColor: colors.blue,
+          height: 115,
           paddingTop: 10,
-          borderTopWidth: 1,
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
           overflow: 'hidden',
         },
-        tabBarActiveTintColor: colors.blue,
-        tabBarInactiveTintColor: colors.gray3,
+        tabBarActiveTintColor: colors.gray6,
+        tabBarInactiveTintColor: colors.white,
         tabBarIcon: ({ focused }) => {
           let icon;
+          let size = { width: 20, height: 20 };
 
           if (route.name === 'Home') {
             icon = tab_home;
+            size = { width: 21, height: 20 };
           } else if (route.name === 'FriendStack') {
             icon = tab_friend;
+            size = { width: 26, height: 26 };
           } else if (route.name === 'MyPageStack') {
             icon = tab_mypage;
+            size = { width: 17.333, height: 17.333 };
           }
 
           return (
             <Image
               source={icon}
               style={{
-                width: 33,
-                height: 33,
-                tintColor: focused ? colors.blue : colors.gray3,
+                ...size,
+                tintColor: focused ? colors.gray6 : colors.white,
               }}
               resizeMode="contain"
             />
@@ -65,7 +67,7 @@ const TabNavigator = () => {
         name="Home"
         component={HomeStack}
         options={{
-          tabBarLabel: renderLabel('홈'),
+          tabBarLabel: renderLabel('Home'),
         }}
       />
       <Tab.Screen
@@ -75,8 +77,6 @@ const TabNavigator = () => {
           tabBarLabel: renderLabel('Friend'),
         }}
       />
-      
-
       <Tab.Screen
         name="MyPageStack"
         component={MyPageStack}
