@@ -15,6 +15,9 @@ export const colors = {
   white: '#ffffff',
   blue: '#B3D7F5',
   sky: '#F3F8FD',
+  gray9: '#A19E9E',
+  kakao: '#FDDC3F',
+  naver: '#00C73C',
   blue2: '#6EAADC',
   blue3: '#70CDF2',
 };
