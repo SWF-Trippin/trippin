@@ -18,4 +18,6 @@ export const colors = {
   gray9: '#A19E9E',
   kakao: '#FDDC3F',
   naver: '#00C73C',
+  blue2: '#6EAADC',
+  blue3: '#70CDF2',
 };
