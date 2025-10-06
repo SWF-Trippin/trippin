@@ -130,7 +130,7 @@ const SignUp = () => {
   return (
     <Container style={{ paddingBottom: bottom }}>
       <InputWrapper>
-        <Label>아이디</Label>
+        <Label1>아이디</Label1>
         <Input
           placeholder="아이디를 입력하세요. (6~20자)"
           value={username}
@@ -243,6 +243,13 @@ const Label = styled(CustomText)`
   font-size: 13px;
   font-weight: 600;
   color: ${colors.gray6};
+`;
+
+const Label1 = styled(CustomText)`
+  font-size: 13px;
+  font-weight: 600;
+  color: ${colors.gray6};
+  margin-top: 36px;
 `;
 
 const Input = styled.TextInput`
