@@ -162,6 +162,7 @@ const SubText = styled(CustomText)`
   color: ${colors.gray7};
   font-size: 12px;
   margin-bottom: 16px;
+  margin-top: 62px;
 `;
 
 const LogoText = styled.Text`
