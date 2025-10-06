@@ -104,6 +104,7 @@ const Label2 = styled(CustomText)`
   font-size: 20px;
   font-weight: 600;
   color: ${colors.gray7};
+  margin-top: 36px;
 `;
 
 const Label3 = styled(CustomText)`
