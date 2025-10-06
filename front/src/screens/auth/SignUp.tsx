@@ -10,7 +10,6 @@ import { colors } from '../../styles/colors';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
 import { Dropdown } from 'react-native-element-dropdown';
 import { Alert, Platform, StyleSheet } from 'react-native';
-import Onboarding from '../onboarding/Onboarding';
 
 type Navigation = NativeStackNavigationProp<AuthStackParam>;
 
@@ -103,8 +102,8 @@ const SignUp = () => {
       if (!res.ok) {
         let detail = '';
         try {
-          const err = await res.json();
-          detail = err?.message || JSON.stringify(err);
+          const errText = await res.text();
+          detail = errText;
         } catch (_) {}
         throw new Error(`${res.status} ${res.statusText} ${detail}`);
       }

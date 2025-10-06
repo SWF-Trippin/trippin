@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Alert } from 'react-native';
 import { Container } from '../../styles/GlobalStyles';
 import styled from 'styled-components/native';
 import CustomText from '../../components/ui/CustomText';
@@ -11,9 +12,47 @@ import PrimaryButton from '../../components/buttons/PrimaryButton';
 
 type Navigation = NativeStackNavigationProp<AuthStackParam>;
 
-const SignUp = () => {
+const Base_URL = 'http://10.0.2.2:8080';
+const PwResetRequest_URL = `${Base_URL}/api/auth/pwreset/request`;
+
+const FindAccount = () => {
   const navigation = useNavigation<Navigation>();
   const { bottom } = useSafeAreaInsets();
+  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleFindPassword = async () => {
+    if (loading) return;
+    if (!email) {
+      Alert.alert('오류', '이메일을 입력해주세요.');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const res = await fetch(PwResetRequest_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(`요청 실패 (${res.status}) : ${errText}`);
+      }
+
+      Alert.alert(
+        '이메일 전송 완료',
+        '입력하신 이메일로 비밀번호 재설정 링크가 전송되었습니다.',
+        [{ text: '확인', onPress: () => {} }],
+      );
+    } catch (e: any) {
+      Alert.alert('실패', e?.message ?? '서버 오류가 발생했습니다.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Container style={{ paddingBottom: bottom }}>
@@ -31,16 +70,16 @@ const SignUp = () => {
       </InputWrapper3>
 
       <PrimaryButton
-        title="비밀번호 찾기"
+        title={loading ? '전송 중...' : '비밀번호 찾기'}
         color={colors.blue}
-        onPress={() => navigation.navigate('Main')}
+        onPress={handleFindPassword}
         fontWeight="400"
       />
     </Container>
   );
 };
 
-export default SignUp;
+export default FindAccount;
 
 const Label = styled(CustomText)`
   font-size: 13px;
