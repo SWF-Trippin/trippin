@@ -40,7 +40,7 @@ const SignUp = () => {
   const navigation = useNavigation<Navigation>();
   const { bottom } = useSafeAreaInsets();
 
-  const [username, setUsername] = useState('');
+  const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -62,7 +62,7 @@ const SignUp = () => {
   const handleSignUp = async () => {
     if (loading) return;
 
-    if (!email || !username || !password) {
+    if (!email || !nickname || !password) {
       Alert.alert('오류', '이메일, 아이디(닉네임), 비밀번호를 입력해 주세요.');
       return;
     }
@@ -78,15 +78,19 @@ const SignUp = () => {
     const birthDate =
       year && month && day ? formatDate(year, month, day) : undefined;
 
+    console.log('📅 birthDate:', birthDate);
+
     const payload: Record<string, any> = {
       email,
       password,
-      nickname: username,
+      username: nickname,
     };
 
     const g = toServerGender(gender);
     if (g) payload.gender = g;
     if (birthDate) payload.birthDate = birthDate;
+
+    console.log('📤 SignUp payload:', JSON.stringify(payload));
 
     try {
       setLoading(true);
@@ -95,6 +99,7 @@ const SignUp = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Accept: 'application/json',
         },
         body: JSON.stringify(payload),
       });
@@ -133,8 +138,8 @@ const SignUp = () => {
         <Label1>아이디</Label1>
         <Input
           placeholder="아이디를 입력하세요. (6~20자)"
-          value={username}
-          onChangeText={setUsername}
+          value={nickname}
+          onChangeText={setNickname}
         />
       </InputWrapper>
       <InputWrapper>
