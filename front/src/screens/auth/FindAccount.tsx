@@ -62,11 +62,19 @@ const FindAccount = () => {
       </InputWrapper2>
       <InputWrapper>
         <Label>이메일</Label>
-        <Input placeholder="이메일을 입력하세요." />
+        <Input
+          placeholder="이메일을 입력하세요."
+          value={email}
+          onChangeText={setEmail}
+        />
       </InputWrapper>
       <InputWrapper3>
         <Label>아이디</Label>
-        <Input placeholder="아이디를 입력하세요." secureTextEntry />
+        <Input
+          placeholder="아이디를 입력하세요."
+          value={username}
+          onChangeText={setUsername}
+        />
       </InputWrapper3>
 
       <PrimaryButton

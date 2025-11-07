@@ -78,8 +78,6 @@ const SignUp = () => {
     const birthDate =
       year && month && day ? formatDate(year, month, day) : undefined;
 
-    console.log('📅 birthDate:', birthDate);
-
     const payload: Record<string, any> = {
       email,
       password,
@@ -89,8 +87,6 @@ const SignUp = () => {
     const g = toServerGender(gender);
     if (g) payload.gender = g;
     if (birthDate) payload.birthDate = birthDate;
-
-    console.log('📤 SignUp payload:', JSON.stringify(payload));
 
     try {
       setLoading(true);
