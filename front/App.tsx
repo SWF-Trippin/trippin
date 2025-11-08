@@ -22,8 +22,8 @@ const App: React.FC = () => {
         </NavigationContainer>
         <Toast
           config={{
-            myCustomToast: props => <CustomErrToast {...props} />,
-            mySuccessToast: props => <CustomSuccessToast {...props} />,
+            erro: props => <CustomErrToast {...props} />,
+            success: props => <CustomSuccessToast {...props} />,
           }}
         />
       </SafeAreaProvider>

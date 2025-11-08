@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: "postgres:latest"
+    image: "postgres:16"
     environment:
       - "POSTGRES_DB=${POSTGRES_DB}"
       - "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}"
@@ -39,7 +39,8 @@ services:
       APP_S3_REGION: ${APP_S3_REGION}
       APP_S3_BUCKET: ${APP_S3_BUCKET}
       APP_CDN_DOMAIN: ${APP_CDN_DOMAIN}
-
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
     env_file:
       - .env
 
