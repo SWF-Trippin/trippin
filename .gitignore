@@ -1,6 +1,33 @@
-.env
+# Java / Gradle
+/build/
+/out/
+*.class
+*.jar
+*.war
+*.ear
+.gradle/
 
-.idea
+# Terraform / Helm
 *.tfstate
 *.tfstate.backup
 .terraform/
+*.tar.gz
+
+# Environment
+.env
+
+# IDE
+.idea/
+*.iml
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Docker
+docker-compose.override.yml
+
+# Logs & temp
+*.log
+tmp/
+*.swp
