@@ -1,3 +1,6 @@
 .env
 
 .idea
+*.tfstate
+*.tfstate.backup
+.terraform/
