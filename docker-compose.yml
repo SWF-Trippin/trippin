@@ -44,5 +44,6 @@ services:
     env_file:
       - .env
 
+#volume
 volumes:
   postgres_data:
