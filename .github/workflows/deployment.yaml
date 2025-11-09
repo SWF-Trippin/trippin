@@ -69,7 +69,7 @@ jobs:
           # ⭐️ GitHub Secrets에 저장된 환경 변수들을 Cloud Run에 주입
           # (주의: 여기에 GOOGLE_APPLICATION_CREDENTIALS는 절대 넣지 마세요!)
           env_vars: |
-            SPRING_DATASOURCE_URL=jdbc:postgresql:///${{ secrets.DB_NAME }}?socketFactory=com.google.cloud.sql.postgres.SocketFactory&cloudSqlInstance=${{ secrets.INSTANCE_CONNECTION_NAME }}
+            SPRING_DATASOURCE_URL=jdbc:postgresql:///${DB_NAME}?cloudSqlInstance=${INSTANCE_CONNECTION_NAME}            
             SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }}
             SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }}
             INSTANCE_CONNECTION_NAME=${{ secrets.INSTANCE_CONNECTION_NAME }}
@@ -92,6 +92,9 @@ jobs:
             CLOUD_SQL=${{ secrets.CLOUD_SQL }}
             DB_NAME=${{ secrets.DB_NAME }}
             APP_S3_ENABLED: false
+            APP_S3_REGION: "disabled"
+            APP_S3_BUCKET: "disabled"
+            APP_CDN_DOMAIN: "disabled"
 
           flags: |
             --add-cloudsql-instances=${{ secrets.INSTANCE_CONNECTION_NAME }}
