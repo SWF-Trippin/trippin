@@ -90,6 +90,7 @@ jobs:
             GCS_BUCKET=${{ secrets.GCS_BUCKET }}
             GCS_DOMAIN=${{ secrets.GCS_DOMAIN }}
             CLOUD_SQL=${{ secrets.CLOUD_SQL }}
+            DB_NAME=${{ secrets.DB_NAME }}
 
           flags: |
             --add-cloudsql-instances=${{ secrets.INSTANCE_CONNECTION_NAME }}
