@@ -151,15 +151,14 @@ public class PhotoService {
                         SignUrlOption.withContentType() // Content-Type을 서명에 포함
                 );
 
+                String normalizedCdn = cdn.startsWith("http") ? cdn : "https://" + cdn;
+                String publicUrl = normalizedCdn + "/" + key;
+
                 out.add(Map.of(
                         "objectKey", key,
                         "uploadUrl", uploadUrl.toString(),
-                        // GCS V4 Signed URL은 S3와 달리 별도 헤더 맵을 반환하지 않습니다.
-                        // Content-Type 등은 서명 자체에 포함되며, 클라이언트는 PUT 요청 시
-                        // 반드시 'Content-Type' 헤더를 전송해야 합니다. (S3도 동일)
-                        // 기존 API 출력 구조를 맞추기 위해 빈 맵을 반환합니다.
                         "headers", Collections.emptyMap(),
-                        "publicUrl", "https://" + cdn + "/" + key
+                        "publicUrl", publicUrl
                 ));
             } catch (Exception e) {
                 // 로깅 추가 권장 (e.g., log.error("Failed to sign URL", e))
@@ -200,7 +199,8 @@ public class PhotoService {
 
                 String address = (lat != null && lng != null) ? geoCodingService.reverseGeocoding(lat, lng) : "위치 정보 없음";
 
-                String publicUrl = "https://" + cdn + "/" + key;
+                String normalizedCdn = cdn.startsWith("http") ? cdn : "https://" + cdn;
+                String publicUrl = normalizedCdn + "/" + key;
                 responses.add(new PhotoUploadResponse(publicUrl, address, takenAt));
             } catch (Exception e) {
                 responses.add(new PhotoUploadResponse(
