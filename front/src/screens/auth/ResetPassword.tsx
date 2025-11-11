@@ -71,7 +71,19 @@ const ResetPassword = () => {
     <Container style={{ paddingBottom: bottom }}>
       <InputWrapper2>
         <Label2>재설정할 비밀번호를 입력해주세요.</Label2>
+        <Input
+          placeholder="비밀번호를 입력하세요."
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+        />
         <Label3>새로 입력한 비밀번호로 비밀번호가 변경됩니다.</Label3>
+        <Input
+          placeholder="비밀번호를 다시 입력하세요."
+          secureTextEntry
+          value={confirm}
+          onChangeText={setConfirm}
+        />
       </InputWrapper2>
       <InputWrapper>
         <Label>비밀번호</Label>
@@ -85,7 +97,7 @@ const ResetPassword = () => {
       <PrimaryButton
         title="비밀번호 재설정"
         color={colors.blue}
-        onPress={() => navigation.navigate('Main')}
+        onPress={handleReset}
         fontWeight="400"
       />
     </Container>
