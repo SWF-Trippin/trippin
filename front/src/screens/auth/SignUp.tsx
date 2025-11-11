@@ -33,7 +33,7 @@ const getDays = (year: number, month: number) => {
   }));
 };
 
-const Base_URL = 'http://10.0.2.2:8080';
+const Base_URL = 'https://trippin-backend-138144251793.us-central1.run.app';
 const SignUp_URL = `${Base_URL}/api/auth/signup`;
 
 const SignUp = () => {

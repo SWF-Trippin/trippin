@@ -17,7 +17,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Navigation = NativeStackNavigationProp<RootStackParamList>;
 
-const Base_URL = 'http://10.0.2.2:8080';
+const Base_URL = 'https://trippin-backend-138144251793.us-central1.run.app';
 const SignIn_URL = `${Base_URL}/api/auth/signin`;
 
 const Onboarding = () => {
