@@ -12,7 +12,7 @@ import PrimaryButton from '../../components/buttons/PrimaryButton';
 
 type Navigation = NativeStackNavigationProp<AuthStackParam>;
 
-const Base_URL = 'http://10.0.2.2:8080';
+const Base_URL = 'https://trippin-backend-138144251793.us-central1.run.app';
 const PwResetRequest_URL = `${Base_URL}/api/auth/pwreset/request`;
 
 const FindAccount = () => {
@@ -33,7 +33,11 @@ const FindAccount = () => {
       setLoading(true);
       const res = await fetch(PwResetRequest_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Reset_Base_Url':
+            'https://trippin-frontend-138144251793.us-central1.run.app/linking',
+        },
         body: JSON.stringify({ email }),
       });
 
