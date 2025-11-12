@@ -20,4 +20,18 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
     List<Photo> findByMarker_IdOrderByCreatedAtDesc(@Param("markerId") Long markerId);
 
     boolean existsByMarker_Id(Long markerId);
+
+    @Query("""
+        SELECT p FROM Photo p
+        LEFT JOIN FETCH p.comments c
+        JOIN FETCH p.marker m
+        JOIN FETCH m.globalPlace gp
+        JOIN FETCH p.post post
+        JOIN FETCH post.user u
+        GROUP BY p
+        ORDER BY (p.likeCount * 2 + COUNT(c)) DESC
+        """)
+    List<Photo> findTop5PopularPhotosWeighted();
+
+    List<Photo> findTop3ByMarker_IdOrderByCreatedAtDesc(Long markerId);
 }
