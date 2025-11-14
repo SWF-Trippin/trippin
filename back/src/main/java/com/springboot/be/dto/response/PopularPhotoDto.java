@@ -1,20 +1,40 @@
 package com.springboot.be.dto.response;
 
 import com.springboot.be.entity.Photo;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-public record PopularPhotoDto(
-        Long photoId,
-        String title, // photo.post.title
-        String content,
-        String imageUrl,
-        int likeCount,
-        int commentCount,
-        String createdAt,
-        Marker marker,
-        Author author
-) {
-    public record Marker(Long id, String placeName, double latitude, double longitude) {}
-    public record Author(String name, String profileImage) {}
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class PopularPhotoDto {
+
+    private Long photoId;
+    private String title;
+    private String content;
+    private String imageUrl;
+    private Long likeCount;
+    private Long commentCount;
+    private String createdAt;
+    private Marker marker;
+    private Author author;
+
+    @Getter @Setter @AllArgsConstructor
+    public static class Marker {
+        private Long id;
+        private String placeName;
+        private double latitude;
+        private double longitude;
+    }
+
+    @Getter @Setter @AllArgsConstructor
+    public static class Author {
+        private String name;
+        private String profileImage;
+    }
 
     public static PopularPhotoDto from(Photo photo) {
         var post = photo.getPost();
@@ -25,9 +45,17 @@ public record PopularPhotoDto(
                 post != null ? post.getTitle() : null,
                 photo.getContent(),
                 photo.getImageUrl(),
-                photo.getLikeCount(),
-                photo.getComments() != null ? photo.getComments().size() : 0,
+
+                photo.getLikeCount() != null
+                        ? photo.getLikeCount().longValue()
+                        : 0L,
+
+                photo.getComments() != null
+                        ? (long) photo.getComments().size()
+                        : 0L,
+
                 photo.getCreatedAt() != null ? photo.getCreatedAt().toString() : null,
+
                 marker != null
                         ? new Marker(
                         marker.getId(),
@@ -36,6 +64,7 @@ public record PopularPhotoDto(
                         marker.getGlobalPlace().getLongitude()
                 )
                         : null,
+
                 post != null && post.getUser() != null
                         ? new Author(
                         post.getUser().getUsername(),

@@ -229,8 +229,8 @@ public class PhotoService {
 
     @Transactional(readOnly = true)
     public List<PopularPhotoDto> getPopularPhotos() {
-        return photoRepository.findTop5PopularPhotosWeighted()
-                .stream()
+        return photoRepository.findTopPopularPhotos().stream()
+                .limit(5)
                 .map(PopularPhotoDto::from)
                 .toList();
     }
