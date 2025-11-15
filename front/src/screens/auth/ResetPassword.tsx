@@ -45,8 +45,10 @@ const ResetPassword = () => {
       setLoading(true);
       const res = await fetch(PwResetConfirm_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, newPassword: password }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token: token, newPassword: password }),
       });
 
       if (res.status === 204) {

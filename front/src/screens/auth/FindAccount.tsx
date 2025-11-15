@@ -35,8 +35,8 @@ const FindAccount = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-Reset_Base_Url':
-            'https://trippin-frontend-138144251793.us-central1.run.app/linking',
+          'X-Reset-Base-Url':
+            'https://trippin-backend-138144251793.us-central1.run.app',
         },
         body: JSON.stringify({ email }),
       });
