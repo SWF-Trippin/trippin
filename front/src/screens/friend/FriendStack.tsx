@@ -7,22 +7,11 @@ import PostDetailScreen from '../shared/PostDetailScreen';
 import CustomText from '../../components/ui/CustomText';
 import { colors } from '../../styles/colors';
 
-export type Post = {
-  postId: number;
-  title?: string | null;
-  thumbnailUrl?: string | null;
-  period?: string | null;
-  authorName?: string | null;
-  authorProfileImage?: string | null;
-  liked?: boolean;
-  likeCount?: number;
-};
-
 export type FriendStackParam = {
   FriendHomeScreen: undefined;
   AddFriendScreen: undefined;
   FriendListScreen: undefined;
-  PostDetailScreen: { post: Post };
+  PostDetailScreen: { postId: number };
 };
 
 const Stack = createNativeStackNavigator<FriendStackParam>();

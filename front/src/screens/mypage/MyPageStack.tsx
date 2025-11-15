@@ -10,20 +10,12 @@ import CustomText from '../../components/ui/CustomText';
 import { colors } from '../../styles/colors';
 import MyPageMain from './MyPageMain';
 
-export type PostType = {
-  userName: string;
-  location: string;
-  date: string;
-  text: string;
-  image: any;
-};
-
 export type MyPageStackParam = {
   MyPageMain: undefined;
   InfoEditScreen: undefined;
   LikedScreen: undefined;
   RouteScreen: undefined;
-  PostDetailScreen: { post: any; comments?: any[] };
+  PostDetailScreen: { postId: number };
 };
 
 const Stack = createNativeStackNavigator<MyPageStackParam>();

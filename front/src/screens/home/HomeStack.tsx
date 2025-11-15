@@ -19,7 +19,7 @@ export type HomeStackParam = {
   MainMapScreen: undefined;
   PostCreateScreen: undefined;
   PostConfirmScreen: { postData: any };
-  PostDetailScreen: { post: any; comment?: any[] };
+  PostDetailScreen: { postId: number };
 };
 
 const Stack = createNativeStackNavigator<HomeStackParam>();
