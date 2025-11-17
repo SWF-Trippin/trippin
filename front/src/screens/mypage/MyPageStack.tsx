@@ -27,7 +27,14 @@ const MyPageStack = () => {
         name="MyPageMain"
         component={MyPageMain}
         options={({ navigation }) => ({
-          title: 'My Page',
+          headerTitle: () => (
+            <CustomText
+              weight="600"
+              style={{ fontSize: 18, color: colors.gray7 }}
+            >
+              마이페이지
+            </CustomText>
+          ),
           headerTitleAlign: 'center',
           headerShadowVisible: false,
           headerRight: () => (
