@@ -31,12 +31,13 @@ const FindAccount = () => {
 
     try {
       setLoading(true);
+
+      const deepLink = 'trippin:/';
       const res = await fetch(PwResetRequest_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-Reset-Base-Url':
-            'https://trippin-backend-138144251793.us-central1.run.app',
+          'X-Reset-Base-Url': deepLink,
         },
         body: JSON.stringify({ email }),
       });
@@ -48,7 +49,7 @@ const FindAccount = () => {
 
       Alert.alert(
         '이메일 전송 완료',
-        '입력하신 이메일로 비밀번호 재설정 링크가 전송되었습니다.',
+        '입력하신 이메일로 비밀번호 재설정 링크가 전송되었습니다. 앱에서 링크를 클릭해주세요.',
         [{ text: '확인', onPress: () => {} }],
       );
     } catch (e: any) {

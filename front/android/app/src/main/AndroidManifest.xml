@@ -28,10 +28,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:scheme="https"
-                    android:host="trippin-backend-138144251793.us-central1.run.app"
-                    android:pathPrefix="/reset" />
+                <data android:scheme="trippin" android:host="reset"/>
             </intent-filter>
       </activity>
     </application>

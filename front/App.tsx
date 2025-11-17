@@ -1,13 +1,18 @@
 import React, { useEffect } from 'react';
 import StackNavigator from './src/navigation/StackNavigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { NavigationContainer } from '@react-navigation/native';
+import {
+  NavigationContainer,
+  createNavigationContainerRef,
+} from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StatusBar } from 'react-native';
 import Toast from 'react-native-toast-message';
 import CustomErrToast from './src/components/ui/CustomErrToast';
 import CustomSuccessToast from './src/components/ui/CustomSuccessToast';
 import { Linking } from 'react-native';
+
+export const navigationRef = createNavigationContainerRef();
 
 const App: React.FC = () => {
   return (
@@ -18,7 +23,7 @@ const App: React.FC = () => {
           backgroundColor="#ffffff"
           hidden={false}
         />
-        <NavigationContainer linking={linking}>
+        <NavigationContainer linking={linking} ref={navigationRef}>
           <StackNavigator />
         </NavigationContainer>
         <Toast
@@ -35,21 +40,19 @@ const App: React.FC = () => {
 export default App;
 
 const linking = {
-  prefixes: ['https://trippin-backend-138144251793.us-central1.run.app'],
+  prefixes: ['trippin://'],
   config: {
     screens: {
       ResetPassword: 'reset',
+      parse: {
+        token: (token: string) => `${token}`,
+      },
     },
   },
-  async getInitialURL() {
-    const url = await Linking.getInitialURL();
-    return url;
-  },
-  subscribe(listener: (url: string) => void) {
+  getInitialURL: async () => await Linking.getInitialURL(),
+  subscribe: (listener: (arg0: string) => any) => {
     const onReceiveURL = ({ url }: { url: string }) => listener(url);
     const subscription = Linking.addEventListener('url', onReceiveURL);
-    return () => {
-      subscription.remove();
-    };
+    return () => subscription.remove();
   },
 };
