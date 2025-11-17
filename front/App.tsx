@@ -43,10 +43,7 @@ const linking = {
   prefixes: ['trippin://'],
   config: {
     screens: {
-      ResetPassword: 'reset',
-      parse: {
-        token: (token: string) => `${token}`,
-      },
+      ResetPassword: 'reset/:token',
     },
   },
   getInitialURL: async () => await Linking.getInitialURL(),

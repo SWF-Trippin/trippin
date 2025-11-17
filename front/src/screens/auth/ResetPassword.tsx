@@ -11,7 +11,7 @@ import { colors } from '../../styles/colors';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
 
 type Navigation = NativeStackNavigationProp<AuthStackParam>;
-type RouteParams = { token?: string };
+type RouteParams = { token: string };
 
 const Base_URL = 'https://trippin-backend-138144251793.us-central1.run.app';
 const PwResetConfirm_URL = `${Base_URL}/api/auth/pwreset/confirm`;
@@ -19,7 +19,7 @@ const PwResetConfirm_URL = `${Base_URL}/api/auth/pwreset/confirm`;
 const ResetPassword = () => {
   const navigation = useNavigation<Navigation>();
   const route = useRoute();
-  const { token } = (route.params as RouteParams) || {};
+  const { token } = route.params as RouteParams;
   const { bottom } = useSafeAreaInsets();
 
   const [password, setPassword] = useState('');
