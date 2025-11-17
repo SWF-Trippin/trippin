@@ -9,6 +9,7 @@ import com.springboot.be.dto.request.ImageUploadRequest;
 import com.springboot.be.dto.response.CommentDto;
 import com.springboot.be.dto.response.PhotoDetailDto;
 import com.springboot.be.dto.response.PhotoUploadResponse;
+import com.springboot.be.dto.response.PopularPhotoDto;
 import com.springboot.be.entity.Photo;
 import com.springboot.be.entity.PhotoLike;
 import com.springboot.be.entity.User;
@@ -151,7 +152,10 @@ public class PhotoService {
                         SignUrlOption.withContentType() // Content-Type을 서명에 포함
                 );
 
-                String normalizedCdn = cdn.startsWith("http") ? cdn : "https://" + cdn;
+                String normalizedCdn = cdn.replaceFirst("^https://https://", "https://");
+                if (!normalizedCdn.startsWith("http")) {
+                    normalizedCdn = "https://" + normalizedCdn;
+                }
                 String publicUrl = normalizedCdn + "/" + key;
 
                 out.add(Map.of(
@@ -161,7 +165,7 @@ public class PhotoService {
                         "publicUrl", publicUrl
                 ));
             } catch (Exception e) {
-                // 로깅 추가 권장 (e.g., log.error("Failed to sign URL", e))
+                e.printStackTrace();
             }
         }
         return out;
@@ -221,5 +225,13 @@ public class PhotoService {
 
         name = name.replaceAll("[^a-zA-Z0-9._-]", "_");
         return "images/" + UUID.randomUUID().toString() + "-" + name + ext;
+    }
+
+    @Transactional(readOnly = true)
+    public List<PopularPhotoDto> getPopularPhotos() {
+        return photoRepository.findTopPopularPhotos().stream()
+                .limit(5)
+                .map(PopularPhotoDto::from)
+                .toList();
     }
 }

@@ -8,14 +8,12 @@ type IconParam = {
   icon: any;
   onPress?: () => void;
   size?: number;
-  color?: string; // 추가
 };
 
-
-const IconButton = ({ icon, onPress, size, color }: IconParam) => {
+const IconButton = ({ icon, onPress, size }: IconParam) => {
   return (
     <Pressable onPress={onPress}>
-      <S.IconImage source={icon} size={size} color={color || colors.white} />
+      <S.IconImage source={icon} size={size} />
     </Pressable>
   );
 };
