@@ -1,24 +1,23 @@
-type PhotoCardData = {
-  type: 'photo';
-  photoId: number;
-  authorName: string;
-  authorProfileImage: string | null;
-  createdAt: string;
-  imageUrl: string;
-  location: string;
-  content: string;
-  likeCount: number;
-  commentCount: number;
-};
-
-type PostCardData = {
-  type: 'post';
-  postId: number;
-  title: string;
-  period: string;
-  authorName: string;
-  authorProfileImage: string | null;
-  thumbnailUrl: string | null;
-};
-
-export type BottomListItem = PhotoCardData | PostCardData;
+export type BottomListItem =
+  | {
+      type: 'photo';
+      photoId: number;
+      postId: number;
+      authorName: string;
+      authorProfileImage: string | null;
+      createdAt: string;
+      imageUrl: string;
+      location: string;
+      content: string;
+      likeCount: number;
+      commentCount: number;
+    }
+  | {
+      type: 'post';
+      postId: number;
+      title: string;
+      period: string;
+      authorName: string;
+      authorProfileImage: string | null;
+      thumbnailUrl: string | null;
+    };

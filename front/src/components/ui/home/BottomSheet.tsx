@@ -9,6 +9,7 @@ import Animated, {
 import styled from 'styled-components/native';
 import { colors } from '../../../styles/colors';
 import BottomList from './BottomList';
+import { BottomListItem } from '../../../types/BottomListItem';
 
 const { height } = Dimensions.get('window');
 const SHEET_TOP_PADDING = 130;
@@ -18,7 +19,8 @@ const INITIAL_POSITION = height * 0.63;
 const DIMISSED_POSITION = height * 0.8;
 
 type BottomSheetProps = {
-  activeTab: 'popular' | 'route' | 'favorite';
+  activeTab: 'popular' | 'favorite';
+  listData: BottomListItem[];
 };
 
 export type BottomSheetRef = {
@@ -27,7 +29,8 @@ export type BottomSheetRef = {
 };
 
 const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(
-  ({ activeTab }, ref) => {
+  (props, ref) => {
+    const { activeTab, listData } = props;
     const translateY = useSharedValue(INITIAL_POSITION);
     const context = useSharedValue({ y: 0 });
 
@@ -84,7 +87,7 @@ const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(
       <GestureDetector gesture={panGesture}>
         <AnimatedSheet style={animatedStyle}>
           <HandleBar />
-          <BottomList type={activeTab} />
+          <BottomList type={activeTab} listData={listData} />
         </AnimatedSheet>
       </GestureDetector>
     );

@@ -1,5 +1,6 @@
 export type PopularPostResponse = {
   photoId: number;
+  postId: number;
   title: string;
   content: string;
   imageUrl: string;

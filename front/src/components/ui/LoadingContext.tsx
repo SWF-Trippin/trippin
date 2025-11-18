@@ -4,6 +4,7 @@ import LottieView from 'lottie-react-native';
 import styled from 'styled-components/native';
 import CustomText from './CustomText';
 import { colors } from '../../styles/colors';
+import { showError } from '../../utils/toast';
 
 type LoadingContextType = {
   setLoading: (visible: boolean, message?: string) => void;
@@ -36,8 +37,11 @@ export const LoadingProvider = ({
   ): Promise<T> => {
     try {
       setLoading(true, msg);
-      const result = await promise;
-      return result;
+      return await promise;
+    } catch (error) {
+      console.error('API ERROR:', error);
+      showError('문제가 발생했습니다. 다시 시도해주세요.');
+      throw error;
     } finally {
       setLoading(false);
     }

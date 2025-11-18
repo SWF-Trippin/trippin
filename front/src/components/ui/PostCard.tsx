@@ -64,6 +64,32 @@ const PostCard = ({ data, onPress }: PostCardProps) => {
     });
   };
 
+  const formatLocation = (location: string) => {
+    if (!location) return '';
+
+    const parts = location.split(' ').filter(Boolean);
+
+    const keywords = ['읍', '면', '동', '리', '로', '길', '가'];
+
+    let breakIndex = -1;
+
+    for (let i = 0; i < parts.length; i++) {
+      const word = parts[i];
+
+      if (keywords.some(k => word.endsWith(k))) {
+        breakIndex = i;
+        break;
+      }
+    }
+
+    if (breakIndex === -1) return location;
+
+    const firstPart = parts.slice(0, breakIndex + 1).join(' ');
+    const secondPart = parts.slice(breakIndex + 1).join(' ');
+
+    return `${firstPart}\n${secondPart}`;
+  };
+
   return (
     <Card onPress={onPress} style={{ width: '100%' }}>
       <StatusView>
@@ -88,7 +114,6 @@ const PostCard = ({ data, onPress }: PostCardProps) => {
 
       <Content>
         <Photo
-          failed={loadFailed}
           source={
             loadFailed
               ? noImage
@@ -112,7 +137,7 @@ const PostCard = ({ data, onPress }: PostCardProps) => {
             ) : (
               <PlaceWrapper>
                 <IconImage source={place} />
-                <Place>{data.location}</Place>
+                <Place>{formatLocation(data.location)}</Place>
               </PlaceWrapper>
             )}
 
@@ -198,9 +223,9 @@ const Content = styled.View`
   gap: 15px;
 `;
 
-const Photo = styled.Image<{ failed: boolean }>`
-  width: ${({ failed }) => (failed ? '80px' : '100px')};
-  height: ${({ failed }) => (failed ? '80px' : '100px')};
+const Photo = styled.Image`
+  width: 100px;
+  height: 100px;
   border-radius: 8px;
   background-color: ${colors.gray1};
 `;
@@ -212,8 +237,10 @@ const TextContent = styled.View`
 
 const PlaceWrapper = styled.View`
   flex-direction: row;
+  align-items: flex-start;
   gap: 2px;
-  align-items: center;
+  max-width: 100%;
+  flex-shrink: 1;
 `;
 
 const IconImage = styled.Image`
@@ -221,7 +248,11 @@ const IconImage = styled.Image`
   height: 20px;
 `;
 
-const Place = styled(CustomText)`
+const Place = styled(CustomText).attrs({
+  numberOfLines: 3,
+  ellipsizeMode: 'tail',
+})`
+  flex-shrink: 1;
   color: ${colors.gray7};
   font-size: 14px;
   font-weight: 700;

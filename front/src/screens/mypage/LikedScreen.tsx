@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import { Container } from '../../styles/GlobalStyles';
 import CustomText from '../../components/ui/CustomText';
-import IconButton from '../../components/buttons/IconButton';
 import heart from '../../assets/images/icon/heart.png';
 import api from '../../../axiosConfig';
 import { colors } from '../../styles/colors';
@@ -14,6 +13,7 @@ import PostCard from '../../components/ui/PostCard';
 
 interface LikedPostType {
   photoId: number;
+  postId: number;
   content: string;
   imageUrl: string;
   createdAt: string;
@@ -21,6 +21,9 @@ interface LikedPostType {
   authorProfileImage: string | null;
   likeCount: number;
   commentCount: number;
+  placeName: string;
+  latitude: number;
+  longitude: number;
 }
 
 const LikedScreen = () => {
@@ -87,7 +90,7 @@ const LikedScreen = () => {
               key={post.photoId}
               onPress={() =>
                 navigation.navigate('PostDetailScreen', {
-                  postId: post.photoId,
+                  postId: post.postId,
                 })
               }
             >
@@ -99,7 +102,7 @@ const LikedScreen = () => {
                   authorProfileImage: post.authorProfileImage,
                   createdAt: post.createdAt,
                   imageUrl: post.imageUrl,
-                  location: '',
+                  location: post.placeName,
                   content: post.content,
                   likeCount: post.likeCount,
                   commentCount: post.commentCount,

@@ -1,5 +1,6 @@
 export type FavoritePostResponse = {
   photoId: number;
+  postId: number;
   content: string;
   imageUrl: string;
   likeCount: number;
@@ -7,4 +8,7 @@ export type FavoritePostResponse = {
   createdAt: string;
   authorName: string;
   authorProfileImage: string | null;
+  placeName: string;
+  latitude: number;
+  longitude: number;
 };
