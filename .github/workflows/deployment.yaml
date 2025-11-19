@@ -92,9 +92,9 @@ jobs:
             GCS_DOMAIN=${{ secrets.GCS_DOMAIN }}
             CLOUD_SQL=${{ secrets.CLOUD_SQL }}
             DB_NAME=${{ secrets.DB_NAME }}
-            APP_S3_ENABLED: false
-            APP_S3_REGION: "disabled"
-            APP_S3_BUCKET: "disabled"
+            APP_S3_ENABLED=false
+            APP_S3_REGION="disabled"  # 🚨 수정됨 (콜론 제거)
+            APP_S3_BUCKET="disabled"
 
           flags: |
             --add-cloudsql-instances=${{ secrets.INSTANCE_CONNECTION_NAME }}
