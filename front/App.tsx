@@ -18,18 +18,18 @@ const App: React.FC = () => {
           backgroundColor="#ffffff"
           hidden={false}
         />
-        <LoadingProvider>
-          <NavigationContainer>
+        <NavigationContainer>
+          <LoadingProvider>
             <StackNavigator />
-          </NavigationContainer>
-          <Toast
-            position="bottom"
-            config={{
-              error: props => <CustomErrToast {...props} />,
-              success: props => <CustomSuccessToast {...props} />,
-            }}
-          />
-        </LoadingProvider>
+          </LoadingProvider>
+        </NavigationContainer>
+        <Toast
+          position="bottom"
+          config={{
+            error: props => <CustomErrToast {...props} />,
+            success: props => <CustomSuccessToast {...props} />,
+          }}
+        />
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

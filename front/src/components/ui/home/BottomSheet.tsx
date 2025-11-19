@@ -19,8 +19,9 @@ const INITIAL_POSITION = height * 0.63;
 const DIMISSED_POSITION = height * 0.8;
 
 type BottomSheetProps = {
-  activeTab: 'popular' | 'favorite';
+  activeTab: 'popular' | 'favorite' | 'route' | 'place';
   listData: BottomListItem[];
+  setListData: React.Dispatch<React.SetStateAction<BottomListItem[]>>;
 };
 
 export type BottomSheetRef = {
@@ -30,7 +31,7 @@ export type BottomSheetRef = {
 
 const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(
   (props, ref) => {
-    const { activeTab, listData } = props;
+    const { activeTab, listData, setListData } = props;
     const translateY = useSharedValue(INITIAL_POSITION);
     const context = useSharedValue({ y: 0 });
 
@@ -87,7 +88,11 @@ const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(
       <GestureDetector gesture={panGesture}>
         <AnimatedSheet style={animatedStyle}>
           <HandleBar />
-          <BottomList type={activeTab} listData={listData} />
+          <BottomList
+            type={activeTab}
+            listData={listData}
+            setListData={setListData}
+          />
         </AnimatedSheet>
       </GestureDetector>
     );

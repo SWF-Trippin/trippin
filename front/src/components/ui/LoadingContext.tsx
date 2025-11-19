@@ -35,9 +35,15 @@ export const LoadingProvider = ({
     promise: Promise<T>,
     msg?: string,
   ): Promise<T> => {
+    const timeoutPromise = new Promise<never>(
+      (_, reject) => setTimeout(() => reject(new Error('TIMEOUT')), 7000), // 7초 타임아웃
+    );
+
     try {
       setLoading(true, msg);
-      return await promise;
+
+      const result = await Promise.race([promise, timeoutPromise]);
+      return result as T;
     } catch (error) {
       console.error('API ERROR:', error);
       showError('문제가 발생했습니다. 다시 시도해주세요.');
@@ -51,12 +57,7 @@ export const LoadingProvider = ({
     <LoadingContext.Provider value={{ setLoading, setLoadingPromise }}>
       {children}
 
-      <Modal
-        transparent
-        visible={visible}
-        animationType="fade"
-        onRequestClose={() => {}}
-      >
+      <Modal transparent visible={visible} animationType="fade">
         <Overlay>
           <LottieView
             source={require('../../assets/animations/loading.json')}
