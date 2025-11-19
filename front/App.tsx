@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import StackNavigator from './src/navigation/StackNavigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {
@@ -11,10 +11,26 @@ import Toast from 'react-native-toast-message';
 import CustomErrToast from './src/components/ui/CustomErrToast';
 import CustomSuccessToast from './src/components/ui/CustomSuccessToast';
 import { Linking } from 'react-native';
+import { AuthStackParam } from './src/screens/auth/AuthStack';
 
-export const navigationRef = createNavigationContainerRef();
+export const navigationRef = createNavigationContainerRef<AuthStackParam>();
 
 const App: React.FC = () => {
+  const navigateFromUrl = (url: string) => {
+    try {
+      console.log('딥링크 감지:', url);
+      const parsed = new URL(url);
+      const path = parsed.pathname.replace('/', '');
+      const token = parsed.searchParams.get('token');
+
+      if (path === 'reset' && token) {
+        navigationRef.navigate('ResetPassword', { token });
+      }
+    } catch (e) {
+      console.log('딥링크 파싱 오류:', e);
+    }
+  };
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
@@ -39,17 +55,26 @@ const App: React.FC = () => {
 
 export default App;
 
-const linking = {
+const linking: any = {
   prefixes: ['trippin://'],
   config: {
     screens: {
-      ResetPassword: 'reset/:token',
+      AuthStack: {
+        screens: {
+          ResetPassword: {
+            path: 'reset',
+            parse: {
+              token: (token: string) => token,
+            },
+          },
+        },
+      },
     },
   },
-  getInitialURL: async () => await Linking.getInitialURL(),
-  subscribe: (listener: (arg0: string) => any) => {
-    const onReceiveURL = ({ url }: { url: string }) => listener(url);
-    const subscription = Linking.addEventListener('url', onReceiveURL);
-    return () => subscription.remove();
+
+  getInitialURL: async () => {
+    const url = await Linking.getInitialURL();
+    console.log('초기 URL:', url);
+    return url;
   },
 };
