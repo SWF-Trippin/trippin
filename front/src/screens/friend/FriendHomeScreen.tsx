@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { View, ScrollView, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { Container } from '../../styles/GlobalStyles';
 import plusFriend from '../../assets/images/icon/plus_friend.png';
 import listIcon from '../../assets/images/icon/friend_list.png';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { FriendStackParam } from './FriendStack';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import friend from '../../assets/images/icon/friend.png';
 import close from '../../assets/images/icon/x_icon.png';
 import styled from 'styled-components/native';
 import { colors } from '../../styles/colors';
-import { TouchableOpacity } from 'react-native';
 import api from '../../../axiosConfig';
 import { showError } from '../../utils/toast';
 import PostCard from '../../components/ui/PostCard';
@@ -53,61 +52,72 @@ const FriendHomeScreen: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+  useFocusEffect(
+    useCallback(() => {
       fetchPosts();
-    });
-    return unsubscribe;
-  }, [navigation]);
+
+      return () => {
+        setOpen(false);
+      };
+    }, []),
+  );
 
   return (
     <Container>
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{ width: '100%', marginTop: 10 }}
+        onScrollBeginDrag={() => {
+          if (open) setOpen(false);
+        }}
       >
         {posts.map((post, idx) => (
-          <TouchableOpacity
+          <PostCard
             key={post.postId ?? idx}
-            onPress={() =>
-              navigation.navigate('PostDetailScreen', { postId: post.postId })
-            }
-            activeOpacity={0.8}
-          >
-            <PostCard
-              data={{
-                type: 'post',
-                postId: post.postId,
-                title: post.title ?? '',
-                thumbnailUrl: post.thumbnailUrl ?? null,
-                period: post.period ?? null,
-                authorName: post.authorName ?? '',
-                authorProfileImage: post.authorProfileImage ?? null,
-              }}
-            />
-          </TouchableOpacity>
+            onPress={() => {
+              if (open) setOpen(false);
+              navigation.navigate('PostDetailScreen', { postId: post.postId });
+            }}
+            data={{
+              type: 'post',
+              postId: post.postId,
+              title: post.title ?? '',
+              thumbnailUrl: post.thumbnailUrl ?? null,
+              period: post.period ?? null,
+              authorName: post.authorName ?? '',
+              authorProfileImage: post.authorProfileImage ?? null,
+            }}
+          />
         ))}
       </ScrollView>
+
+      {open && <CloseArea onPress={() => setOpen(false)} />}
 
       <FloatingWrapper>
         {open && (
           <>
             <MiniButton
               style={{ bottom: 140 }}
-              onPress={() => navigation.navigate('FriendListScreen')}
+              onPress={() => {
+                setOpen(false);
+                navigation.navigate('FriendListScreen');
+              }}
             >
               <MiniIconImage source={listIcon} />
             </MiniButton>
 
             <MiniButton
               style={{ bottom: 70 }}
-              onPress={() => navigation.navigate('AddFriendScreen')}
+              onPress={() => {
+                setOpen(false);
+                navigation.navigate('AddFriendScreen');
+              }}
             >
               <MiniIconImage source={plusFriend} />
             </MiniButton>
           </>
         )}
-        <MainButton open={open} onPress={() => setOpen(!open)}>
+        <MainButton open={open} onPress={() => setOpen(prev => !prev)}>
           <MainButtonIcon>
             <MainIconImage source={open ? close : friend} />
           </MainButtonIcon>
@@ -119,74 +129,25 @@ const FriendHomeScreen: React.FC = () => {
 
 export default FriendHomeScreen;
 
-const Block = styled.View`
-  width: 100%;
-  padding: 20px;
-  margin: 5px 0;
-  background-color: ${colors.sky};
-  border-radius: 24px;
-  elevation: 4;
+const CloseArea = styled.Pressable.attrs({
+  pointerEvents: 'box-only',
+})`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
 `;
 
-const Header = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 5px;
-`;
-
-const UserInfo = styled.View`
-  flex-direction: row;
-  align-items: center;
-  flex: 1;
-`;
-
-const ProfileImage = styled.Image`
-  width: 30px;
-  height: 30px;
-  border-radius: 24px;
-`;
-
-const UserName = styled.Text`
-  margin-left: 12px;
-  font-weight: bold;
-  font-size: 14px;
-`;
-
-const IconGroup = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 20px;
-`;
-
-const IconImage = styled.Image`
-  width: 25px;
-  height: 25px;
-`;
-
-const ContentRow = styled.View`
-  flex-direction: row;
-  align-items: flex-start;
-`;
-
-const LeftImage = styled.Image`
-  width: 100px;
-  height: 100px;
-  border-radius: 8px;
-  margin-right: 12px;
-`;
-
-const InfoArea = styled.View`
-  flex: 1;
-  justify-content: center;
-`;
-
-const FloatingWrapper = styled.View`
+const FloatingWrapper = styled.View.attrs({
+  pointerEvents: 'box-none',
+})`
   position: absolute;
   bottom: 25px;
   right: 25px;
   align-items: center;
+  z-index: 999;
 `;
 
 const MainButton = styled.TouchableOpacity<{ open: boolean }>`

@@ -27,8 +27,16 @@ const MyPageStack = () => {
         name="MyPageMain"
         component={MyPageMain}
         options={({ navigation }) => ({
-          title: 'My Page',
+          headerTitle: () => (
+            <CustomText
+              weight="600"
+              style={{ fontSize: 18, color: colors.gray7 }}
+            >
+              마이페이지
+            </CustomText>
+          ),
           headerTitleAlign: 'center',
+          headerShadowVisible: false,
           headerRight: () => (
             <IconButton
               icon={setting}
@@ -47,7 +55,7 @@ const MyPageStack = () => {
               weight="600"
               style={{ fontSize: 18, color: colors.gray7 }}
             >
-              My Page
+              마이페이지
             </CustomText>
           ),
           headerTitleAlign: 'center',
@@ -63,7 +71,7 @@ const MyPageStack = () => {
               weight="600"
               style={{ fontSize: 18, color: colors.gray7 }}
             >
-              My Page
+              좋아요한 글
             </CustomText>
           ),
           headerTitleAlign: 'center',
@@ -79,7 +87,7 @@ const MyPageStack = () => {
               weight="600"
               style={{ fontSize: 18, color: colors.gray7 }}
             >
-              My Page
+              나의 여행경로
             </CustomText>
           ),
           headerTitleAlign: 'center',

@@ -52,6 +52,7 @@ const TabWrapper = styled.View`
   width: 100%;
   height: 45px;
   flex-direction: row;
+  background-color: ${colors.white};
 `;
 
 const TabButton = styled.Pressable<{ active: boolean }>`

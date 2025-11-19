@@ -1,18 +1,25 @@
 import styled from 'styled-components/native';
 import CustomText from '../CustomText';
 import { colors } from '../../../styles/colors';
-import { photosDummyData } from '../../../data/photoDummyData';
-import { forwardRef } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
+import { BottomListItem } from '../../../types/BottomListItem';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { HomeStackParam } from '../../../screens/home/HomeStack';
 import PostCard from '../PostCard';
 
-type ListType = 'popular' | 'route' | 'favorite';
+type ListType = 'popular' | 'favorite';
 
 type BottomListProps = {
   type: ListType;
+  listData: BottomListItem[];
 };
 
-const BottomList = forwardRef<any, BottomListProps>(({ type }, ref) => {
+type Navigation = NativeStackNavigationProp<HomeStackParam>;
+
+const BottomList = ({ type, listData }: BottomListProps) => {
+  const navigation = useNavigation<Navigation>();
+
   return (
     <>
       <TopSection>
@@ -22,12 +29,6 @@ const BottomList = forwardRef<any, BottomListProps>(({ type }, ref) => {
             <TopText>TOP 5</TopText>
           </>
         )}
-        {type === 'route' && (
-          <>
-            <Detail>오늘의 인기 경로</Detail>
-            <TopText>TOP 1</TopText>
-          </>
-        )}
         {type === 'favorite' && (
           <>
             <Detail>내가 좋아한 장소</Detail>
@@ -35,14 +36,22 @@ const BottomList = forwardRef<any, BottomListProps>(({ type }, ref) => {
           </>
         )}
       </TopSection>
-      <ScrollView ref={ref} contentContainerStyle={{ paddingBottom: 300 }}>
-        {photosDummyData.map(photo => (
-          <PostCard key={photo.photoId} data={{ type: 'photo', ...photo }} />
+      <ScrollView contentContainerStyle={{ paddingBottom: 300 }}>
+        {listData.map((item: BottomListItem) => (
+          <PostCard
+            key={item.type === 'photo' ? item.photoId : item.postId}
+            data={item}
+            onPress={() =>
+              navigation.navigate('PostDetailScreen', {
+                postId: item.postId,
+              })
+            }
+          />
         ))}
       </ScrollView>
     </>
   );
-});
+};
 
 export default BottomList;
 

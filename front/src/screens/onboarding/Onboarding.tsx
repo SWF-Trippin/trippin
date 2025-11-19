@@ -47,6 +47,7 @@ const Onboarding = () => {
       await AsyncStorage.setItem('refreshToken', data.refreshToken);
       const userEmailToSave = data.email ?? email;
       await AsyncStorage.setItem('userEmail', userEmailToSave);
+      await AsyncStorage.setItem('username', data.username);
 
       navigation.navigate('Main');
     } catch (e: any) {
