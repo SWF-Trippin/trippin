@@ -19,6 +19,8 @@ import com.springboot.be.repository.PhotoLikeRepository;
 import com.springboot.be.repository.PhotoRepository;
 import com.springboot.be.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
