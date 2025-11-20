@@ -15,6 +15,7 @@ import styled from 'styled-components/native';
 import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '../../../axiosConfig.ts';
+import logo from '../../assets/images/logo/main_logo.png';
 
 type Navigation = NativeStackNavigationProp<RootStackParamList>;
 
@@ -65,7 +66,7 @@ const Onboarding = () => {
   return (
     <Container style={{ paddingBottom: bottom, paddingTop: 152 }}>
       <SubText weight="400">기록하고싶은 그 순간, trippin에 담아</SubText>
-      <LogoText>Trippin</LogoText>
+      <LogoText source={logo} />
 
       <InputWrapper>
         <Label>이메일</Label>
@@ -152,12 +153,12 @@ const SubText = styled(CustomText)`
   margin-bottom: 16px;
 `;
 
-const LogoText = styled.Text`
-  color: ${colors.gray7};
-  font-family: Ghanachocolate;
-  font-weight: 400;
-  font-size: 50px;
-  margin-bottom: 65px;
+const LogoText = styled.Image.attrs({
+  resizeMode: 'contain',
+})`
+  width: 200px;
+  height: 80px;
+  margin-bottom: 40px;
 `;
 
 const InputWrapper = styled.View`

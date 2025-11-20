@@ -11,6 +11,7 @@ export type BottomListItem =
       content: string;
       likeCount: number;
       commentCount: number;
+      liked?: boolean;
     }
   | {
       type: 'post';

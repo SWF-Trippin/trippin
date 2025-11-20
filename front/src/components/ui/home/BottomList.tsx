@@ -8,16 +8,17 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { HomeStackParam } from '../../../screens/home/HomeStack';
 import PostCard from '../PostCard';
 
-type ListType = 'popular' | 'favorite';
+type ListType = 'popular' | 'favorite' | 'route' | 'place';
 
 type BottomListProps = {
   type: ListType;
   listData: BottomListItem[];
+  setListData: React.Dispatch<React.SetStateAction<BottomListItem[]>>;
 };
 
 type Navigation = NativeStackNavigationProp<HomeStackParam>;
 
-const BottomList = ({ type, listData }: BottomListProps) => {
+const BottomList = ({ type, listData, setListData }: BottomListProps) => {
   const navigation = useNavigation<Navigation>();
 
   return (
@@ -35,9 +36,16 @@ const BottomList = ({ type, listData }: BottomListProps) => {
             <TopText>TOP 5</TopText>
           </>
         )}
+        {type === 'place' && (
+          <>
+            <Detail>이 장소의 게시글 목록</Detail>
+            <TopText>PLACE POSTS</TopText>
+          </>
+        )}
       </TopSection>
+
       <ScrollView contentContainerStyle={{ paddingBottom: 300 }}>
-        {listData.map((item: BottomListItem) => (
+        {listData.map(item => (
           <PostCard
             key={item.type === 'photo' ? item.photoId : item.postId}
             data={item}
@@ -46,6 +54,15 @@ const BottomList = ({ type, listData }: BottomListProps) => {
                 postId: item.postId,
               })
             }
+            onToggleLike={(photoId, liked, newCount) => {
+              setListData(prev =>
+                prev.map(p =>
+                  p.type === 'photo' && p.photoId === photoId
+                    ? { ...p, liked, likeCount: newCount }
+                    : p,
+                ),
+              );
+            }}
           />
         ))}
       </ScrollView>

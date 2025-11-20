@@ -5,9 +5,11 @@ import author from '../../assets/images/icon/author.png';
 import noImage from '../../assets/images/icon/no_image.png';
 import place from '../../assets/images/icon/place.png';
 import filledHeart from '../../assets/images/icon/filledheart.png';
+import heart from '../../assets/images/icon/heart.png';
 import comment from '../../assets/images/icon/chat.png';
 import { View } from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import api from '../../../axiosConfig';
 
 type PhotoData = {
   type: 'photo';
@@ -20,6 +22,7 @@ type PhotoData = {
   content: string;
   likeCount: number;
   commentCount: number;
+  liked?: boolean;
 };
 
 type PostData = {
@@ -35,23 +38,31 @@ type PostData = {
 type PostCardProps = {
   data: PhotoData | PostData;
   onPress?: () => void;
+  onToggleLike?: (photoId: number, liked: boolean, likeCount: number) => void;
 };
 
-const PostCard = ({ data, onPress }: PostCardProps) => {
+const isPhotoData = (data: PhotoData | PostData): data is PhotoData => {
+  return data.type === 'photo';
+};
+
+const PostCard = ({ data, onPress, onToggleLike }: PostCardProps) => {
   if (!data) return null;
 
   const isPost = data.type === 'post';
+  const isPhoto = isPhotoData(data);
+
   const [loadFailed, setLoadFailed] = useState(false);
+  const [isLiked, setIsLiked] = useState(isPhoto ? data.liked : false);
+  const [likeCount, setLikeCount] = useState(isPhoto ? data.likeCount : 0);
+  const [processing, setProcessing] = useState(false);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const days = ['일', '월', '화', '수', '목', '금', '토'];
-
     const year = String(date.getFullYear()).slice(2);
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     const weekday = days[date.getDay()];
-
     return `${year}.${month}.${day} (${weekday})`;
   };
 
@@ -68,14 +79,12 @@ const PostCard = ({ data, onPress }: PostCardProps) => {
     if (!location) return '';
 
     const parts = location.split(' ').filter(Boolean);
-
     const keywords = ['읍', '면', '동', '리', '로', '길', '가'];
 
     let breakIndex = -1;
 
     for (let i = 0; i < parts.length; i++) {
       const word = parts[i];
-
       if (keywords.some(k => word.endsWith(k))) {
         breakIndex = i;
         break;
@@ -84,14 +93,58 @@ const PostCard = ({ data, onPress }: PostCardProps) => {
 
     if (breakIndex === -1) return location;
 
-    const firstPart = parts.slice(0, breakIndex + 1).join(' ');
-    const secondPart = parts.slice(breakIndex + 1).join(' ');
+    let firstPart = parts.slice(0, breakIndex + 1).join(' ');
+    let secondPart = parts.slice(breakIndex + 1).join(' ');
+
+    const nextWord = parts[breakIndex + 1];
+    const startsWithNumber = nextWord && /^\d/.test(nextWord);
+
+    if (startsWithNumber) {
+      firstPart += ' ' + nextWord;
+      secondPart = parts.slice(breakIndex + 2).join(' ');
+    }
+
+    if (!secondPart) return firstPart;
 
     return `${firstPart}\n${secondPart}`;
   };
 
+  const toggleLike = async () => {
+    if (!isPhoto || processing) return;
+
+    setProcessing(true);
+
+    try {
+      if (!isLiked) {
+        const res = await api.post(`/api/photos/${data.photoId}/like`);
+        const result = res.data.data;
+
+        setIsLiked(result.liked);
+        setLikeCount(result.likeCount);
+
+        onToggleLike?.(data.photoId, true, result.likeCount); // 부모에게 보고
+      } else {
+        await api.delete(`/api/photos/${data.photoId}/like`);
+
+        setIsLiked(false);
+        setLikeCount(likeCount - 1);
+
+        onToggleLike?.(data.photoId, false, likeCount - 1);
+      }
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isPhoto) {
+      setIsLiked(data.liked);
+      setLikeCount(data.likeCount);
+    }
+  }, [data]);
+
   return (
-    <Card onPress={onPress} style={{ width: '100%' }}>
+    <Card onPress={onPress}>
       <StatusView>
         <AuthorWrapper>
           <ProfileImage
@@ -104,7 +157,7 @@ const PostCard = ({ data, onPress }: PostCardProps) => {
           <Author>{data.authorName}</Author>
         </AuthorWrapper>
 
-        {isPost === false && data.createdAt && (
+        {isPhoto && data.createdAt && (
           <DateWrapper>
             <DateText>{formatDate(data.createdAt)}</DateText>
             <TimeText>{formatTime(data.createdAt)}</TimeText>
@@ -150,10 +203,12 @@ const PostCard = ({ data, onPress }: PostCardProps) => {
             )}
           </View>
 
-          {!isPost && (
+          {isPhoto && (
             <Row>
-              <Icon source={filledHeart} />
-              <Count>{data.likeCount}</Count>
+              <HeartButton onPress={toggleLike}>
+                <Icon source={isLiked ? filledHeart : heart} />
+              </HeartButton>
+              <Count>{likeCount}</Count>
               <Icon source={comment} />
               <Count>{data.commentCount}</Count>
             </Row>
@@ -291,6 +346,8 @@ const Row = styled.View`
   align-items: center;
   gap: 3px;
 `;
+
+const HeartButton = styled.Pressable``;
 
 const Icon = styled.Image`
   width: 19px;

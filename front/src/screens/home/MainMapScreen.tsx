@@ -18,6 +18,7 @@ import { Image } from 'react-native';
 import { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
 
 type TabType = 'popular' | 'route' | 'favorite';
+type ListType = 'popular' | 'favorite' | 'route' | 'place';
 
 type RouteLinePoint = {
   latitude: number;
@@ -45,6 +46,7 @@ const KOREA_BOUNDS = [
 
 const MainMapScreen = () => {
   const [activeTab, setActiveTab] = useState<TabType>('popular');
+  const [listType, setListType] = useState<ListType>('popular');
   const sheetRef = useRef<BottomSheetRef>(null);
   const [listData, setListData] = useState<BottomListItem[]>([]);
   const [markers, setMarkers] = useState<MarkerData[]>([]);
@@ -53,6 +55,7 @@ const MainMapScreen = () => {
     latitude: INITIAL_REGION.latitude,
     longitude: INITIAL_REGION.longitude,
   });
+  const [selectedMarkerId, setSelectedMarkerId] = useState<number | null>(null);
 
   const mapRef = useRef<any>(null);
 
@@ -110,6 +113,7 @@ const MainMapScreen = () => {
         content: item.content,
         likeCount: item.likeCount,
         commentCount: item.commentCount,
+        liked: true,
       })),
     );
 
@@ -164,10 +168,13 @@ const MainMapScreen = () => {
     try {
       if (activeTab === 'popular') {
         await Promise.all([fetchPopularPosts(), fetchPopularMarkers()]);
+        setListType('popular');
       } else if (activeTab === 'favorite') {
         await fetchFavoritePosts();
+        setListType('favorite');
       } else if (activeTab === 'route') {
         await fetchRouteData();
+        setListType('route');
       }
     } catch (e) {
       console.error(e);
@@ -184,6 +191,8 @@ const MainMapScreen = () => {
   const handleMarkerPress = useCallback(
     async (marker: MarkerData) => {
       try {
+        setSelectedMarkerId(marker.id);
+
         const res = await setLoadingPromise(
           api.get(`/api/map/markers/${marker.id}/posts`),
           '마커 게시글 불러오는 중...',
@@ -209,6 +218,7 @@ const MainMapScreen = () => {
         }));
 
         setListData(mapped);
+        setListType('place');
       } catch (e) {
         console.error(e);
         showError('마커 게시글을 불러오지 못했습니다.');
@@ -223,7 +233,7 @@ const MainMapScreen = () => {
 
   useEffect(() => {
     sheetRef.current?.reset();
-  }, [activeTab]);
+  }, [listType]);
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -278,7 +288,10 @@ const MainMapScreen = () => {
           >
             <Image
               source={markerImg}
-              style={{ width: 40, height: 57 }}
+              style={{
+                width: selectedMarkerId === m.id ? 55 : 40,
+                height: selectedMarkerId === m.id ? 78 : 57,
+              }}
               resizeMode="contain"
             />
           </Marker>
@@ -294,7 +307,12 @@ const MainMapScreen = () => {
       </StyledMapView>
 
       {activeTab !== 'route' && (
-        <BottomSheet ref={sheetRef} activeTab={activeTab} listData={listData} />
+        <BottomSheet
+          ref={sheetRef}
+          activeTab={listType}
+          listData={listData}
+          setListData={setListData}
+        />
       )}
     </MapViewContainer>
   );
