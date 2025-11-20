@@ -106,7 +106,7 @@ const AnimatedSheet = styled(Animated.View)`
   top: 0;
   left: 0;
   right: 0;
-  height: ${height}px;
+  height: ${height + 200}px;
   background-color: ${colors.white};
   filter: drop-shadow(0 -4px 4px rgba(0, 0, 0, 0.13));
   border-top-left-radius: 20px;
