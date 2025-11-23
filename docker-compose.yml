@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: "postgres:latest"
+    image: "postgres:16"
     environment:
       - "POSTGRES_DB=${POSTGRES_DB}"
       - "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}"
@@ -40,6 +40,9 @@ services:
       GOOGLE_API_KEY: ${GOOGLE_API_KEY}
       APP_S3_REGION: ${APP_S3_REGION}
       APP_S3_BUCKET: ${APP_S3_BUCKET}
+      GCP_PROJECT_ID: ${GCP_PROJECT_ID}
+      GCS_BUCKET: ${GCS_BUCKET}
+      GCS_DOMAIN: ${GCS_DOMAIN}
       APP_CDN_DOMAIN: ${APP_CDN_DOMAIN}
       OPENAI_API_KEY: ${OPENAI_API_KEY}
 
